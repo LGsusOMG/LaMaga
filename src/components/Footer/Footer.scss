@@ -1,0 +1,284 @@
+@use "sass:color";
+@use "../../App.scss" as *;
+
+.footer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-top: auto;
+
+    .footer-wrapper {
+        .footer-main {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+
+            @media screen and (max-width: 768px) {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+        }
+
+        .footer-column {
+            .footer-brand {
+                font-size: 1.75rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .footer-description {
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .footer-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 1.25rem;
+                position: relative;
+                padding-bottom: 0.5rem;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    width: 40px;
+                    height: 2px;
+                    background: linear-gradient(90deg, #ffd700 0%, transparent 100%);
+
+                    @media screen and (max-width: 768px) {
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
+                }
+            }
+
+            // Social Links Section
+            .social-section {
+                margin-top: 1.5rem;
+
+                .social-title {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: rgba(255, 255, 255, 0.9);
+                    margin-bottom: 1rem;
+                }
+
+                .social-links {
+                    display: flex;
+                    gap: 12px;
+
+                    @media screen and (max-width: 768px) {
+                        justify-content: center;
+                    }
+
+                    .social-link {
+                        width: 45px;
+                        height: 45px;
+                        border-radius: 12px;
+                        background: rgba(255, 255, 255, 0.1);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        text-decoration: none;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(255, 255, 255, 0.15);
+                        position: relative;
+                        overflow: hidden;
+
+                        i {
+                            font-size: 1.3rem;
+                            position: relative;
+                            z-index: 2;
+                            transition: transform 0.3s ease;
+                        }
+
+                        // Efecto de fondo con color de red social
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: var(--social-color);
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                            z-index: 1;
+                        }
+
+                        &:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                            border-color: var(--social-color);
+
+                            &::before {
+                                opacity: 1;
+                            }
+
+                            i {
+                                transform: scale(1.15);
+                            }
+                        }
+
+                        &:active {
+                            transform: translateY(-2px);
+                        }
+                    }
+                }
+            }
+
+            .footer-links {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    margin-bottom: 0.75rem;
+
+                    a {
+                        color: rgba(255, 255, 255, 0.8);
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                        display: inline-block;
+                        font-size: 0.9rem;
+                        position: relative;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            bottom: -2px;
+                            left: 0;
+                            width: 0;
+                            height: 2px;
+                            background: #ffd700;
+                            transition: width 0.3s ease;
+                        }
+
+                        &:hover {
+                            color: #ffd700;
+                            transform: translateX(5px);
+
+                            &::after {
+                                width: 100%;
+                            }
+
+                            @media screen and (max-width: 768px) {
+                                transform: translateX(0) scale(1.05);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .footer-contact {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 1rem;
+                    color: rgba(255, 255, 255, 0.8);
+                    font-size: 0.9rem;
+
+                    @media screen and (max-width: 768px) {
+                        justify-content: center;
+                    }
+
+                    i {
+                        color: #ffd700;
+                        font-size: 1.1rem;
+                        flex-shrink: 0;
+                    }
+
+                    a {
+                        color: rgba(255, 255, 255, 0.8);
+                        text-decoration: none;
+                        transition: color 0.3s ease;
+
+                        &:hover {
+                            color: #ffd700;
+                        }
+                    }
+
+                    span {
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+
+        .footer-bottom {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+
+            .footer-bottom-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 15px;
+
+                @media screen and (max-width: 768px) {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .footer-legal {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    flex-wrap: wrap;
+
+                    @media screen and (max-width: 768px) {
+                        justify-content: center;
+                    }
+
+                    a {
+                        color: rgba(255, 255, 255, 0.8);
+                        text-decoration: none;
+                        font-size: 0.875rem;
+                        transition: all 0.3s ease;
+                        padding: 4px 8px;
+                        border-radius: 4px;
+
+                        &:hover {
+                            color: #ffd700;
+                            background: rgba(255, 255, 255, 0.1);
+                        }
+                    }
+
+                    .separator {
+                        color: rgba(255, 255, 255, 0.3);
+                        font-size: 0.875rem;
+                    }
+                }
+
+                .copyright-text {
+                    color: rgba(255, 255, 255, 0.7);
+                    font-size: 0.875rem;
+                }
+            }
+        }
+    }
+}

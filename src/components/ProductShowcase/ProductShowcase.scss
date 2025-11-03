@@ -1,0 +1,104 @@
+@use "../../App.scss" as *;
+
+.product-showcase {
+    padding: 40px 0;
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+
+        .section-title-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+
+            .section-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin: 0;
+                padding: 0 20px;
+
+                @media screen and (max-width: 768px) {
+                    font-size: 2rem;
+                }
+            }
+
+            .title-underline {
+                height: 4px;
+                background: linear-gradient(90deg, transparent 0%, #667eea 50%, transparent 100%);
+                margin-top: 10px;
+                border-radius: 2px;
+            }
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: rgba(0, 0, 0, 0.6);
+            margin: 0;
+            font-weight: 400;
+
+            @media screen and (max-width: 768px) {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+.error-message {
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .error-content {
+        text-align: center;
+        background: white;
+        padding: 50px 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+
+        i {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        .retry-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
+        }
+    }
+}

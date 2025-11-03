@@ -1,0 +1,38 @@
+@use "../../App.scss" as *;
+
+.product-lists {
+    display: grid;
+    gap: 25px;
+    padding: 20px 0;
+
+    @media screen and (min-width: 576px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    @media screen and (min-width: 992px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media screen and (min-width: 1400px) {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.no-products {
+    padding: 60px 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+
+    p {
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.5);
+        margin: 0;
+    }
+}
