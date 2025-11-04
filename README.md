@@ -38,6 +38,3 @@ El sitio busca reflejar la identidad del negocio, mostrar su catálogo de produc
 * **SCSS / Bootstrap** – Estilos y diseño responsivo.
 * **JavaScript** – Interactividad y dinámicas en la interfaz.
 * **Git y GitHub** – Control de versiones y despliegue.
-
-
-¿Quieres que lo adapte para que se vea más **técnico** (enfocado al desarrollo web y despliegue en GitHub Pages) o más **comercial** (orientado a presentación de la tienda al público)? Así te genero la versión ideal según tu enfoque.
