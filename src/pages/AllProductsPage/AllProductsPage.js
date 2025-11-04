@@ -1,109 +1,79 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
-import './CategoryProductPage.scss';
+import { Link } from 'react-router-dom';
+import './AllProductsPage.scss';
 import ProductList from '../../components/ProductList/ProductList';
-import {
-  fetchProductsByCategory,
-  getCategoryProducts
-} from '../../store/categorySlice';
+import { fetchAllProducts, getAllProducts } from '../../store/productSlice';
 
-const CategoryProductPage = () => {
+const AllProductsPage = () => {
   const dispatch = useDispatch();
-  const { category } = useParams();
-  const categoryProducts = useSelector(state =>
-    getCategoryProducts(state, category)
-  );
+  const allProducts = useSelector(getAllProducts);
+  const [loading, setLoading] = useState(true);
 
   // Estados para filtros y ordenamiento
   const [sortBy, setSortBy] = useState('relevance');
   const [filterType, setFilterType] = useState('all');
+  const [priceRange, setPriceRange] = useState('all');
 
   useEffect(() => {
-    if (category && category !== 'undefined') {
-      dispatch(fetchProductsByCategory(category));
-    }
-  }, [dispatch, category]);
+    const loadProducts = async () => {
+      setLoading(true);
+      await dispatch(fetchAllProducts());
+      setLoading(false);
+    };
+    loadProducts();
+  }, [dispatch]);
 
-  // Función para filtrar productos
-  const filterProducts = (products) => {
-    if (!products) return [];
-
-    switch (filterType) {
-      case 'featured':
-        return products.filter(product => product.featured === true);
-
-      case 'bestsellers':
-        // Si tienes un campo de ventas, úsalo. Si no, usa stock bajo como indicador
-        return products.filter(product => product.stock < 10);
-
-      case 'discounts':
-        return products.filter(product => product.discount > 0);
-
-      default:
-        return products;
-    }
-  };
-
-  // Función para ordenar productos
-  const sortProducts = (products) => {
-    if (!products || products.length === 0) return [];
-
-    const sorted = [...products];
-
-    switch (sortBy) {
-      case 'price-asc':
-        return sorted.sort((a, b) => {
-          const priceA = a.price * (1 - (a.discount || 0) / 100);
-          const priceB = b.price * (1 - (b.discount || 0) / 100);
-          return priceA - priceB;
-        });
-
-      case 'price-desc':
-        return sorted.sort((a, b) => {
-          const priceA = a.price * (1 - (a.discount || 0) / 100);
-          const priceB = b.price * (1 - (b.discount || 0) / 100);
-          return priceB - priceA;
-        });
-
-      case 'name-asc':
-        return sorted.sort((a, b) => a.title.localeCompare(b.title));
-
-      case 'name-desc':
-        return sorted.sort((a, b) => b.title.localeCompare(a.title));
-
-      case 'newest':
-        return sorted.sort((a, b) => {
-          const dateA = new Date(a.created_at || 0);
-          const dateB = new Date(b.created_at || 0);
-          return dateB - dateA;
-        });
-
-      case 'discount':
-        return sorted.sort((a, b) => (b.discount || 0) - (a.discount || 0));
-
-      default: // relevance
-        return sorted;
-    }
-  };
-
+  // Aplicar filtros y ordenamiento usando useMemo
   const processedProducts = useMemo(() => {
-    if (!categoryProducts) return [];
+    if (!allProducts) return [];
 
     // Filtrar productos
-    let filtered = categoryProducts;
+    let filtered = allProducts;
+    
+    // Filtro por tipo
     switch (filterType) {
-      case 'featured':
-        filtered = categoryProducts.filter(product => product.featured === true);
-        break;
-      case 'bestsellers':
-        filtered = categoryProducts.filter(product => product.stock < 10);
-        break;
       case 'discounts':
-        filtered = categoryProducts.filter(product => product.discount > 0);
+        filtered = filtered.filter(product => product.discount > 0);
+        break;
+      case 'in-stock':
+        filtered = filtered.filter(product => product.stock > 0);
+        break;
+      case 'featured':
+        filtered = filtered.filter(product => product.featured === true);
         break;
       default:
-        filtered = categoryProducts;
+        break;
+    }
+
+    // Filtro por rango de precio
+    switch (priceRange) {
+      case 'under-100':
+        filtered = filtered.filter(product => {
+          const finalPrice = product.price * (1 - (product.discount || 0) / 100);
+          return finalPrice < 100;
+        });
+        break;
+      case '100-500':
+        filtered = filtered.filter(product => {
+          const finalPrice = product.price * (1 - (product.discount || 0) / 100);
+          return finalPrice >= 100 && finalPrice <= 500;
+        });
+        break;
+      case '500-1000':
+        filtered = filtered.filter(product => {
+          const finalPrice = product.price * (1 - (product.discount || 0) / 100);
+          return finalPrice > 500 && finalPrice <= 1000;
+        });
+        break;
+      case 'over-1000':
+        filtered = filtered.filter(product => {
+          const finalPrice = product.price * (1 - (product.discount || 0) / 100);
+          return finalPrice > 1000;
+        });
+        break;
+      default:
+        break;
     }
 
     // Ordenar productos
@@ -117,34 +87,34 @@ const CategoryProductPage = () => {
           const priceB = b.price * (1 - (b.discount || 0) / 100);
           return priceA - priceB;
         });
-
+      
       case 'price-desc':
         return sorted.sort((a, b) => {
           const priceA = a.price * (1 - (a.discount || 0) / 100);
           const priceB = b.price * (1 - (b.discount || 0) / 100);
           return priceB - priceA;
         });
-
+      
       case 'name-asc':
         return sorted.sort((a, b) => a.title.localeCompare(b.title));
-
+      
       case 'name-desc':
         return sorted.sort((a, b) => b.title.localeCompare(a.title));
-
+      
       case 'newest':
         return sorted.sort((a, b) => {
           const dateA = new Date(a.created_at || 0);
           const dateB = new Date(b.created_at || 0);
           return dateB - dateA;
         });
-
+      
       case 'discount':
         return sorted.sort((a, b) => (b.discount || 0) - (a.discount || 0));
-
+      
       default: // relevance
         return sorted;
     }
-  }, [categoryProducts, filterType, sortBy]);
+  }, [allProducts, filterType, sortBy, priceRange]);
 
   // Manejadores de eventos
   const handleSortChange = (e) => {
@@ -155,38 +125,21 @@ const CategoryProductPage = () => {
     setFilterType(filter);
   };
 
-  // Error: Categoría no válida
-  if (!category || category === 'undefined') {
-    return (
-      <main className="category-page">
-        <div className='container'>
-          <div className='error-state'>
-            <div className='error-icon'>
-              <i className='bi bi-exclamation-triangle'></i>
-            </div>
-            <h2>Categoría no especificada</h2>
-            <p>No se pudo determinar la categoría a mostrar.</p>
-            <Link to="/" className='back-home-btn'>
-              <i className='bi bi-house'></i>
-              <span>Volver al inicio</span>
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  const handlePriceRangeChange = (range) => {
+    setPriceRange(range);
+  };
 
   // Estado de carga
-  if (!categoryProducts || categoryProducts.length === 0) {
+  if (loading) {
     return (
-      <main className="category-page">
+      <main className="all-products-page">
         <div className='container'>
           <div className='loading-state'>
             <div className='loading-spinner'>
               <div className='spinner'></div>
             </div>
             <h2>Cargando productos...</h2>
-            <p>Estamos buscando los mejores productos de {category}</p>
+            <p>Estamos preparando nuestro catálogo completo</p>
           </div>
         </div>
       </main>
@@ -194,9 +147,9 @@ const CategoryProductPage = () => {
   }
 
   return (
-    <main className="category-page">
-      {/* Header de la categoría */}
-      <section className='category-hero'>
+    <main className="all-products-page">
+      {/* Header */}
+      <section className='products-hero'>
         <div className='container'>
           <div className='breadcrumb'>
             <Link to="/">
@@ -204,21 +157,19 @@ const CategoryProductPage = () => {
               Inicio
             </Link>
             <i className='bi bi-chevron-right'></i>
-            <span>Categorías</span>
-            <i className='bi bi-chevron-right'></i>
-            <span className='active'>{category}</span>
+            <span className='active'>Todos los productos</span>
           </div>
-
-          <div className='category-header'>
-            <div className='category-icon'>
-              <i className='bi bi-tag-fill'></i>
+          
+          <div className='products-header'>
+            <div className='products-icon'>
+              <i className='bi bi-box-seam'></i>
             </div>
-            <div className='category-info'>
-              <h1 className='category-title'>{category}</h1>
-              <p className='category-count'>
+            <div className='products-info'>
+              <h1 className='products-title'>Todos los Productos</h1>
+              <p className='products-count'>
                 {processedProducts.length} {processedProducts.length === 1 ? 'producto' : 'productos'}
-                {filterType !== 'all' && categoryProducts && (
-                  <span className='total-count'> de {categoryProducts.length} totales</span>
+                {(filterType !== 'all' || priceRange !== 'all') && allProducts && (
+                  <span className='total-count'> de {allProducts.length} totales</span>
                 )}
               </p>
             </div>
@@ -226,30 +177,52 @@ const CategoryProductPage = () => {
         </div>
       </section>
 
-      {/* Filtros y ordenamiento */}
+      {/* Filters Section */}
       <section className='filters-section'>
         <div className='container'>
           <div className='filters-bar'>
             <div className='filter-group'>
-              <button
+              <button 
                 className={`filter-btn ${filterType === 'all' ? 'active' : ''}`}
                 onClick={() => handleFilterChange('all')}
               >
                 <i className='bi bi-grid-3x3-gap'></i>
                 Todos
               </button>
-              <button
+              <button 
                 className={`filter-btn ${filterType === 'discounts' ? 'active' : ''}`}
                 onClick={() => handleFilterChange('discounts')}
               >
                 <i className='bi bi-percent'></i>
                 En oferta
               </button>
+              <button 
+                className={`filter-btn ${filterType === 'in-stock' ? 'active' : ''}`}
+                onClick={() => handleFilterChange('in-stock')}
+              >
+                <i className='bi bi-check-circle'></i>
+                Disponibles
+              </button>
             </div>
 
+            <div className='price-filter-group'>
+              <label>Precio:</label>
+              <select 
+                className='price-select'
+                value={priceRange}
+                onChange={(e) => handlePriceRangeChange(e.target.value)}
+              >
+                <option value="all">Todos los precios</option>
+                <option value="under-100">Menos de $100</option>
+                <option value="100-500">$100 - $500</option>
+                <option value="500-1000">$500 - $1,000</option>
+                <option value="over-1000">Más de $1,000</option>
+              </select>
+            </div>
+            
             <div className='sort-group'>
               <label htmlFor="sort-select">Ordenar por:</label>
-              <select
+              <select 
                 id="sort-select"
                 className='sort-select'
                 value={sortBy}
@@ -267,17 +240,31 @@ const CategoryProductPage = () => {
           </div>
 
           {/* Indicador de filtros activos */}
-          {(filterType !== 'all' || sortBy !== 'relevance') && (
+          {(filterType !== 'all' || sortBy !== 'relevance' || priceRange !== 'all') && (
             <div className='active-filters'>
               <span className='filter-label'>Filtros activos:</span>
               {filterType !== 'all' && (
                 <span className='filter-badge'>
                   {filterType === 'featured' && 'Destacados'}
-                  {filterType === 'bestsellers' && 'Más vendidos'}
                   {filterType === 'discounts' && 'En oferta'}
-                  <button
+                  {filterType === 'in-stock' && 'Disponibles'}
+                  <button 
                     className='remove-filter'
                     onClick={() => handleFilterChange('all')}
+                  >
+                    <i className='bi bi-x'></i>
+                  </button>
+                </span>
+              )}
+              {priceRange !== 'all' && (
+                <span className='filter-badge'>
+                  {priceRange === 'under-100' && 'Menos de $100'}
+                  {priceRange === '100-500' && '$100 - $500'}
+                  {priceRange === '500-1000' && '$500 - $1,000'}
+                  {priceRange === 'over-1000' && 'Más de $1,000'}
+                  <button 
+                    className='remove-filter'
+                    onClick={() => handlePriceRangeChange('all')}
                   >
                     <i className='bi bi-x'></i>
                   </button>
@@ -293,11 +280,12 @@ const CategoryProductPage = () => {
                   {sortBy === 'discount' && 'Descuento'}
                 </span>
               )}
-              <button
+              <button 
                 className='clear-filters'
                 onClick={() => {
                   setFilterType('all');
                   setSortBy('relevance');
+                  setPriceRange('all');
                 }}
               >
                 <i className='bi bi-x-circle'></i>
@@ -308,7 +296,7 @@ const CategoryProductPage = () => {
         </div>
       </section>
 
-      {/* Lista de productos */}
+      {/* Products Grid */}
       <section className='products-section'>
         <div className='container'>
           {processedProducts.length > 0 ? (
@@ -319,15 +307,16 @@ const CategoryProductPage = () => {
                 <i className='bi bi-inbox'></i>
               </div>
               <h3>No hay productos con estos filtros</h3>
-              <p>Intenta cambiar los filtros o ver todos los productos</p>
-              <button
+              <p>Intenta cambiar los filtros para ver más productos</p>
+              <button 
                 className='reset-btn'
                 onClick={() => {
                   setFilterType('all');
                   setSortBy('relevance');
+                  setPriceRange('all');
                 }}
               >
-                Ver todos los productos
+                Limpiar todos los filtros
               </button>
             </div>
           )}
@@ -339,17 +328,13 @@ const CategoryProductPage = () => {
         <div className='container'>
           <div className='cta-card'>
             <div className='cta-content'>
-              <h3>¿No encontraste lo que buscabas?</h3>
-              <p>Explora otras categorías o realiza una búsqueda personalizada</p>
+              <h3>¿Buscas algo específico?</h3>
+              <p>Explora por categorías o usa nuestra búsqueda avanzada</p>
             </div>
             <div className='cta-actions'>
               <Link to="/" className='cta-btn primary'>
                 <i className='bi bi-grid-3x3-gap'></i>
                 Ver categorías
-              </Link>
-              <Link to="/products" className='cta-btn secondary'>
-                <i className='bi bi-box-seam'></i>
-                Todos los productos
               </Link>
             </div>
           </div>
@@ -359,4 +344,4 @@ const CategoryProductPage = () => {
   );
 }
 
-export default CategoryProductPage;
+export default AllProductsPage;

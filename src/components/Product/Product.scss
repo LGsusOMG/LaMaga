@@ -9,7 +9,7 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
     border: 1px solid rgba(102, 126, 234, 0.1);
-    
+
     &:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
@@ -43,7 +43,7 @@
         align-items: center;
         gap: 5px;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        
+
         i {
             font-size: 10px;
         }
@@ -141,13 +141,14 @@
             transform: scale(1.1);
         }
 
+        // Overlay simple sin botones
         .image-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            background: linear-gradient(180deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
             opacity: 0;
             visibility: hidden;
             transition: all 0.4s ease;
@@ -155,36 +156,27 @@
             align-items: center;
             justify-content: center;
 
-            .overlay-actions {
-                display: flex;
-                gap: 12px;
+            // Puedes agregar un texto o ícono simple en el centro
+            &::before {
+                content: 'Ver detalles';
+                color: white;
+                font-size: 1.2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                opacity: 0;
                 transform: translateY(20px);
-                transition: transform 0.4s ease 0.1s;
+                transition: all 0.4s ease 0.1s;
             }
         }
 
-        &:hover .image-overlay .overlay-actions {
-            transform: translateY(0);
-        }
+        &:hover .image-overlay {
+            opacity: 1;
+            visibility: visible;
 
-        .action-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            color: #667eea;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            &:hover {
-                background: #667eea;
-                color: white;
-                transform: scale(1.1);
+            &::before {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     }
@@ -293,7 +285,8 @@
             margin-bottom: 15px;
             font-size: 12px;
 
-            .in-stock, .out-of-stock {
+            .in-stock,
+            .out-of-stock {
                 display: flex;
                 align-items: center;
                 gap: 6px;
@@ -370,9 +363,12 @@
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
@@ -382,6 +378,7 @@
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }

@@ -13,7 +13,7 @@ import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 
 import SingleProduct from './pages/SingleProduct/SingleProduct';
-
+import AllProductsPage from './pages/AllProductsPage/AllProductsPage';
 
 function Layout() {
   const location = useLocation();
@@ -33,6 +33,7 @@ function Layout() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/product/:id" element={<ErrorBoundary><SingleProduct /></ErrorBoundary>} />
+        <Route path="/products" element={<ErrorBoundary><AllProductsPage /></ErrorBoundary>} />
       </Routes>
       {shouldShowLayout && <Footer />}
     </>

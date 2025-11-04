@@ -80,7 +80,7 @@ const SingleProduct = () => {
     <main className="single-product py-5">
       <div className="container">
         <button onClick={() => navigate(-1)} className="back-btn mb-4">
-          <i className="fas fa-arrow-left"></i> Volver
+          <i className="bi bi-arrow-left"></i> Volver
         </button>
         
         <div className="product-detail-card">

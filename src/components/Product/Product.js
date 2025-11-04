@@ -59,19 +59,8 @@ const Product = ({ product }) => {
             }}
             style={{ opacity: imageLoaded ? 1 : 0 }}
           />
-          <div className='image-overlay'>
-            <div className='overlay-actions'>
-              <button className='action-btn' title='Vista rápida'>
-                <i className="bi bi-eye"></i>
-              </button>
-              <button className='action-btn' title='Añadir a favoritos'>
-                <i className="bi bi-heart"></i>
-              </button>
-              <button className='action-btn' title='Comparar'>
-                <i className="bi bi-arrow-left-right"></i>
-              </button>
-            </div>
-          </div>
+          {/* Overlay simple sin botones */}
+          <div className='image-overlay'></div>
         </div>
       </Link>
 
