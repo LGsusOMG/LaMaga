@@ -38,67 +38,6 @@ const SearchPage = () => {
     }
   }, [urlSearchTerm, performSearch]);
 
-  // Función para filtrar productos
-  const filterProducts = (products) => {
-    if (!products) return [];
-
-    switch (filterType) {
-      case 'discounts':
-        return products.filter(product => product.discount > 0);
-
-      case 'high-rated':
-        return products.filter(product => (product.rating || 0) >= 4);
-
-      case 'in-stock':
-        return products.filter(product => product.stock > 0);
-
-      default:
-        return products;
-    }
-  };
-
-  // Función para ordenar productos
-  const sortProducts = (products) => {
-    if (!products || products.length === 0) return [];
-
-    const sorted = [...products];
-
-    switch (sortBy) {
-      case 'price-asc':
-        return sorted.sort((a, b) => {
-          const priceA = a.price * (1 - (a.discount || 0) / 100);
-          const priceB = b.price * (1 - (b.discount || 0) / 100);
-          return priceA - priceB;
-        });
-
-      case 'price-desc':
-        return sorted.sort((a, b) => {
-          const priceA = a.price * (1 - (a.discount || 0) / 100);
-          const priceB = b.price * (1 - (b.discount || 0) / 100);
-          return priceB - priceA;
-        });
-
-      case 'name-asc':
-        return sorted.sort((a, b) => a.title.localeCompare(b.title));
-
-      case 'name-desc':
-        return sorted.sort((a, b) => b.title.localeCompare(a.title));
-
-      case 'newest':
-        return sorted.sort((a, b) => {
-          const dateA = new Date(a.created_at || 0);
-          const dateB = new Date(b.created_at || 0);
-          return dateB - dateA;
-        });
-
-      case 'discount':
-        return sorted.sort((a, b) => (b.discount || 0) - (a.discount || 0));
-
-      default: // relevance
-        return sorted;
-    }
-  };
-
   // Aplicar filtros y ordenamiento
   const processedResults = useMemo(() => {
     if (!searchResults) return [];
