@@ -1,7 +1,7 @@
 // src/pages/Admin/AdminDashboard.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../data/supabaseClient';
+import { supabase } from '../../../data/supabaseClient';
 import './AdminDashboard.scss';
 
 const AdminDashboard = () => {

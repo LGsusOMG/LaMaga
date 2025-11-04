@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 import AdminLogin from './pages/AdminLogin/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
 
 import SingleProduct from './pages/SingleProduct/SingleProduct';
 import AllProductsPage from './pages/AllProductsPage/AllProductsPage';

@@ -1,6 +1,6 @@
 // src/pages/Admin/AdminProducts.js
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../data/supabaseClient';
+import { supabase } from '../../../data/supabaseClient';
 import { Link } from 'react-router-dom';
 import './AdminProducts.scss';
 
