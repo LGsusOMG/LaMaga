@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# 🪄 La Maga - Tienda de Conveniencia
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**La Maga** es una tienda de conveniencia moderna y cercana a la comunidad. En su página web, los usuarios pueden conocer los productos disponibles, promociones, información de contacto y ubicación de la tienda. El objetivo es ofrecer una experiencia sencilla, práctica y atractiva para los clientes.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌐 Descripción del Proyecto
 
-### `npm start`
+Este proyecto consiste en una página web informativa y funcional para **La Maga**, una tienda de abarrotes y conveniencia.
+El sitio busca reflejar la identidad del negocio, mostrar su catálogo de productos esenciales y facilitar la comunicación con los clientes.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎯 Objetivos
 
-### `npm test`
+* Mostrar información general sobre la tienda.
+* Permitir a los clientes visualizar productos y precios.
+* Promocionar ofertas y novedades.
+* Facilitar el contacto y la ubicación mediante mapas y redes sociales.
+* Ofrecer una interfaz clara, moderna y adaptable a dispositivos móviles.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🛍️ Características Principales
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* **Página de inicio** con presentación del negocio y eslogan.
+* **Sección de productos** con imágenes, precios y categorías (abarrotes, bebidas, snacks, limpieza, etc.).
+* **Promociones destacadas** actualizables fácilmente.
+* **Información de contacto.**
+* **Integración con Google Maps** para mostrar la ubicación.
+* **Diseño responsivo** (adaptado a computadoras, tablets y móviles).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🧱 Tecnologías Utilizadas
 
-### `npm run eject`
+* **HTML** – Estructura del sitio.
+* **SCSS / Bootstrap** – Estilos y diseño responsivo.
+* **JavaScript** – Interactividad y dinámicas en la interfaz.
+* **Git y GitHub** – Control de versiones y despliegue.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+¿Quieres que lo adapte para que se vea más **técnico** (enfocado al desarrollo web y despliegue en GitHub Pages) o más **comercial** (orientado a presentación de la tienda al público)? Así te genero la versión ideal según tu enfoque.
