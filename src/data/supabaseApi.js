@@ -1,4 +1,3 @@
-// data/supabaseApi.js
 import { supabase } from './supabaseClient';
 
 // Función para obtener el usuario actual

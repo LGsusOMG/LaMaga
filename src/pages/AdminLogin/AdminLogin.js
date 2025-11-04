@@ -62,14 +62,14 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      // 1️⃣ Crear usuario en Auth
+      // 1️Crear usuario en Auth
       const { error: authError } = await supabase.auth.signUp({
         email: email.trim(),
         password: password,
       });
       if (authError) throw authError;
 
-      // 2️⃣ Verificar si ya existe en la tabla 'admins'
+      // 2️ Verificar si ya existe en la tabla 'admins'
       const { data: existingAdmin, error: fetchError } = await supabase
         .from('admins')
         .select('*')
@@ -81,7 +81,7 @@ const AdminLogin = () => {
         return;
       }
 
-      // 3️⃣ Si no existe, insertarlo
+      // 3️ Si no existe, insertarlo
       const { error: adminError } = await supabase
         .from('admins')
         .insert([{ email: email.trim() }]);
@@ -144,7 +144,7 @@ const AdminLogin = () => {
               disabled={loading}
               className="login-btn"
             >
-              {loading ? '🔐 Iniciando sesión...' : '🚀 Iniciar Sesión'}
+              {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </form>
         </div>
