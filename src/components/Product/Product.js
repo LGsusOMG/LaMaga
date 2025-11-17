@@ -17,6 +17,9 @@ const Product = ({ product }) => {
     );
   }
 
+  // Determinar la URL de la imagen (priorizar image_url de Supabase)
+  const imageUrl = product.image_url || product.image || 'https://placehold.co/300x400/667eea/white?text=Sin+Imagen';
+
   return (
     <div className='product-item'>
       {/* Badge de categoría */}
@@ -50,14 +53,18 @@ const Product = ({ product }) => {
           )}
           <img 
             className='img-cover' 
-            src={product.image} 
+            src={imageUrl}
             alt={product.title}
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
               setImageError(true);
-              e.target.src = 'https://via.placeholder.com/300x400?text=Sin+Imagen';
+              setImageLoaded(true);
+              e.target.src = 'https://placehold.co/300x400/667eea/white?text=Sin+Imagen';
             }}
-            style={{ opacity: imageLoaded ? 1 : 0 }}
+            style={{ 
+              opacity: imageLoaded ? 1 : 0,
+              transition: 'opacity 0.3s ease'
+            }}
           />
           {/* Overlay simple sin botones */}
           <div className='image-overlay'></div>

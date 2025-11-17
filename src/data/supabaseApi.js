@@ -13,7 +13,7 @@ export const isAdmin = async (email) => {
     .select('*')
     .eq('email', email)
     .single()
-  
+
   return !error && data
 }
 
@@ -24,9 +24,9 @@ export const getCategories = async () => {
       .from('categories')
       .select('*')
       .order('name');
-    
+
     if (error) throw error;
-    
+
     // Convertir a formato que espera tu app (solo nombres)
     return data.map(category => category.name);
   } catch (error) {
@@ -45,9 +45,9 @@ export const getAllProductsFromDB = async () => {
         categories (name)
       `)
       .order('title');
-    
+
     if (error) throw error;
-    
+
     // Adaptar formato a lo que espera tu componente
     return data.map(product => ({
       id: product.id,
@@ -57,7 +57,8 @@ export const getAllProductsFromDB = async () => {
       discount: product.discount,
       brand: product.brand,
       stock: product.stock,
-      image: product.image_url
+      image: product.image_url, // ← Mapear image_url a image
+      image_url: product.image_url // ← También mantener image_url
     }));
   } catch (error) {
     console.error('Error fetching all products:', error);
@@ -76,9 +77,9 @@ export const getFeaturedProducts = async (limit = 8) => {
       `)
       .or(`discount.gt.0,is_featured.eq.true`)
       .limit(limit);
-    
+
     if (error) throw error;
-    
+
     return data.map(product => ({
       id: product.id,
       title: product.title,
@@ -87,7 +88,8 @@ export const getFeaturedProducts = async (limit = 8) => {
       discount: product.discount,
       brand: product.brand,
       stock: product.stock,
-      image: product.image_url
+      image: product.image_url, // ← Mapear image_url a image
+      image_url: product.image_url // ← También mantener image_url
     }));
   } catch (error) {
     console.error('Error fetching featured products:', error);
@@ -99,19 +101,19 @@ export const getFeaturedProducts = async (limit = 8) => {
 export const getProductsByCategory = async (categoryName) => {
   try {
     console.log('📂 supabaseApi - Getting products for category:', categoryName);
-    
+
     // Primero obtener el ID de la categoría por nombre
     const { data: categoryData, error: categoryError } = await supabase
       .from('categories')
       .select('id, name')
       .ilike('name', `%${categoryName}%`) // Busqueda más flexible
       .single();
-    
+
     if (categoryError) {
       console.error('📂 supabaseApi - Error finding category:', categoryError);
       return [];
     }
-    
+
     console.log('📂 supabaseApi - Category found:', categoryData);
 
     // Luego obtener productos por category_id
@@ -122,7 +124,7 @@ export const getProductsByCategory = async (categoryName) => {
         categories (name)
       `)
       .eq('category_id', categoryData.id);
-    
+
     if (productsError) {
       console.error('📂 supabaseApi - Error finding products:', productsError);
       return [];
@@ -138,7 +140,8 @@ export const getProductsByCategory = async (categoryName) => {
       discount: product.discount,
       brand: product.brand,
       stock: product.stock,
-      image: product.image_url
+      image: product.image_url, // ← Mapear image_url a image
+      image_url: product.image_url // ← También mantener image_url
     }));
 
   } catch (error) {
@@ -151,13 +154,13 @@ export const getProductsByCategory = async (categoryName) => {
 export const searchProducts = async (searchTerm) => {
   try {
     console.log('🔍 supabaseApi - Searching for:', searchTerm);
-    
+
     if (!searchTerm || searchTerm.trim() === '') {
       return [];
     }
 
     const searchPattern = `%${searchTerm}%`;
-    
+
     // Consulta separada para productos por título y marca
     const { data: productsData, error: productsError } = await supabase
       .from('products')
@@ -173,7 +176,7 @@ export const searchProducts = async (searchTerm) => {
     }
 
     console.log('🔍 supabaseApi - Products found:', productsData?.length || 0);
-    
+
     return productsData.map(product => ({
       id: product.id,
       title: product.title,
@@ -182,7 +185,8 @@ export const searchProducts = async (searchTerm) => {
       discount: product.discount,
       brand: product.brand,
       stock: product.stock,
-      image: product.image_url
+      image: product.image_url, // ← Mapear image_url a image
+      image_url: product.image_url // ← También mantener image_url
     }));
 
   } catch (error) {

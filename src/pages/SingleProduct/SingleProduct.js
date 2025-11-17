@@ -11,6 +11,7 @@ const SingleProduct = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,7 +43,26 @@ const SingleProduct = () => {
     fetchProduct();
   }, [id]);
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.title,
+          text: `Mira este producto: ${product.title}`,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.log('Error al compartir:', err);
+      }
+    } else {
+      // Fallback: copiar URL al portapapeles
+      navigator.clipboard.writeText(window.location.href);
+      alert('Enlace copiado al portapapeles');
+    }
+  };
+
   if (loading) return <Loader />;
+  
   if (error) {
     return (
       <div className="error-container">
@@ -50,13 +70,14 @@ const SingleProduct = () => {
           <div className="error-message">
             <h2>{error}</h2>
             <button onClick={() => navigate(-1)} className="back-btn">
-              ← Volver
+              <i className="fas fa-arrow-left"></i> Volver
             </button>
           </div>
         </div>
       </div>
     );
   }
+  
   if (!product) {
     return (
       <div className="error-container">
@@ -64,7 +85,7 @@ const SingleProduct = () => {
           <div className="error-message">
             <h2>Producto no encontrado</h2>
             <button onClick={() => navigate(-1)} className="back-btn">
-              ← Volver
+              <i className="fas fa-arrow-left"></i> Volver
             </button>
           </div>
         </div>
@@ -74,7 +95,10 @@ const SingleProduct = () => {
 
   const finalPrice = product.discount > 0 
     ? (product.price * (1 - product.discount / 100)).toFixed(2)
-    : product.price.toFixed(2);
+    : parseFloat(product.price).toFixed(2);
+
+  // Determinar la URL de la imagen
+  const imageUrl = product.image_url || 'https://placehold.co/500x500/667eea/white?text=Sin+Imagen';
 
   return (
     <main className="single-product py-5">
@@ -86,11 +110,23 @@ const SingleProduct = () => {
         <div className="product-detail-card">
           <div className="product-images">
             <div className="main-image">
+              {!imageLoaded && (
+                <div className="image-skeleton">
+                  <i className="fas fa-image"></i>
+                  <p>Cargando imagen...</p>
+                </div>
+              )}
               <img 
-                src={product.image_url || 'https://via.placeholder.com/500x500?text=Sin+Imagen'} 
+                src={imageUrl}
                 alt={product.title}
+                onLoad={() => setImageLoaded(true)}
                 onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/500x500?text=Sin+Imagen';
+                  setImageLoaded(true);
+                  e.target.src = 'https://placehold.co/500x500/667eea/white?text=Sin+Imagen';
+                }}
+                style={{
+                  opacity: imageLoaded ? 1 : 0,
+                  transition: 'opacity 0.3s ease'
                 }}
               />
             </div>
@@ -119,7 +155,7 @@ const SingleProduct = () => {
                     <i className="fas fa-percentage"></i> {product.discount}% OFF
                   </span>
                   <p className="savings">
-                    Ahorras: ${(product.price - finalPrice).toFixed(2)}
+                    Ahorras: ${(parseFloat(product.price) - parseFloat(finalPrice)).toFixed(2)}
                   </p>
                 </div>
               ) : (
@@ -151,7 +187,7 @@ const SingleProduct = () => {
             )}
 
             <div className="actions">
-              <button className="btn-share">
+              <button className="btn-share" onClick={handleShare}>
                 <i className="fas fa-share-alt"></i>
                 Compartir
               </button>

@@ -9,20 +9,22 @@ import store from "./store/store";
 import { Provider } from "react-redux";
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
-import AdminLogin from './pages/AdminLogin/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
-import AdminProducts from './pages/AdminProducts/AdminProducts';
-import AdminCategories from './pages/AdminCategories/AdminCategories';
+import AdminLogin from './pages/Admin/AdminLogin/AdminLogin';
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
+import AdminProducts from './pages/Admin/AdminProducts/AdminProducts';
+import AdminCategories from './pages/Admin/AdminCategories/AdminCategories';
+import AdminProductForm from './pages/Admin/AdminProductForm/AdminProductForm';
+import AdminUsers from './pages/Admin/AdminUsers/AdminUsers';
 
 import SingleProduct from './pages/SingleProduct/SingleProduct';
 import AllProductsPage from './pages/AllProductsPage/AllProductsPage';
 
 function Layout() {
   const location = useLocation();
-  // Definimos rutas donde no queremos mostrar Header, Sidebar ni Footer
-  const noLayoutRoutes = ['/admin/login', '/admin/dashboard', '/admin/products', '/admin/categories'];
-
-  const shouldShowLayout = !noLayoutRoutes.includes(location.pathname);
+  
+  // Verificar si estamos en cualquier ruta de admin
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const shouldShowLayout = !isAdminRoute;
 
   return (
     <>
@@ -37,6 +39,9 @@ function Layout() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
+        <Route path="/admin/products/new" element={<AdminProductForm />} />
+        <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
 
         <Route path="/product/:id" element={<ErrorBoundary><SingleProduct /></ErrorBoundary>} />
         <Route path="/products" element={<ErrorBoundary><AllProductsPage /></ErrorBoundary>} />

@@ -1,7 +1,7 @@
-// src/pages/Admin/AdminCategories.js
+// src/pages/Admin/AdminCategories/AdminCategories.js
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../data/supabaseClient';
-import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../../data/supabaseClient';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import './AdminCategories.scss';
 
 const AdminCategories = () => {
@@ -17,11 +17,21 @@ const AdminCategories = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     checkAuth();
     loadCategories();
   }, []);
+
+  // Detectar si viene el parámetro ?create=true en la URL
+  useEffect(() => {
+    if (searchParams.get('create') === 'true') {
+      handleOpenModal();
+      // Limpiar el parámetro de la URL después de abrir el modal
+      setSearchParams({});
+    }
+  }, [searchParams]);
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
