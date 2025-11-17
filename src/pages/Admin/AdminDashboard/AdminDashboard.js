@@ -50,10 +50,15 @@ const AdminDashboard = () => {
                 .from('admins')
                 .select('*', { count: 'exact', head: true });
 
+            const { count: socialLinksCount } = await supabase
+                .from('social_links')
+                .select('*', { count: 'exact', head: true });
+
             setStats({
                 products: productsCount || 0,
                 categories: categoriesCount || 0,
                 admins: adminsCount || 0,
+                socialLinks: socialLinksCount || 0,
                 orders: 0
             });
             setLoading(false);
@@ -142,20 +147,37 @@ const AdminDashboard = () => {
 
                         {/* Solo mostrar si tiene permisos */}
                         {canManageAdmins && (
-                            <div className={`stat-card admins ${loading ? 'loading' : ''}`}>
-                                <div className="stat-icon">👥</div>
-                                <div className="stat-info">
-                                    <h3>Administradores</h3>
-                                    <p className="stat-number">{stats.admins}</p>
-                                    <p className="stat-description">Usuarios con acceso</p>
+                            <>
+                                <div className={`stat-card admins ${loading ? 'loading' : ''}`}>
+                                    <div className="stat-icon">👥</div>
+                                    <div className="stat-info">
+                                        <h3>Administradores</h3>
+                                        <p className="stat-number">{stats.admins}</p>
+                                        <p className="stat-description">Usuarios con acceso</p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/admin/users')}
+                                        className="stat-action"
+                                    >
+                                        Gestionar →
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => navigate('/admin/users')}
-                                    className="stat-action"
-                                >
-                                    Gestionar →
-                                </button>
-                            </div>
+
+                                <div className={`stat-card social ${loading ? 'loading' : ''}`}>
+                                    <div className="stat-icon">🔗</div>
+                                    <div className="stat-info">
+                                        <h3>Redes Sociales</h3>
+                                        <p className="stat-number">{stats.socialLinks}</p>
+                                        <p className="stat-description">Enlaces configurados</p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/admin/social-links')}
+                                        className="stat-action"
+                                    >
+                                        Gestionar →
+                                    </button>
+                                </div>
+                            </>
                         )}
                     </div>
                 </section>

@@ -1,34 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./Footer.scss";
 import { Link } from 'react-router-dom';
+import { supabase } from '../../data/supabaseClient';
 
 const Footer = () => {
-  const socialLinks = [
-    { 
-      name: 'Facebook', 
-      url: 'https://www.facebook.com', 
-      icon: 'bi-facebook', 
-      color: '#1877f2' 
-    },
-    { 
-      name: 'Instagram', 
-      url: 'https://www.instagram.com', 
-      icon: 'bi-instagram', 
-      color: '#e4405f' 
-    },
-    { 
-      name: 'Twitter', 
-      url: 'https://twitter.com', 
-      icon: 'bi-twitter-x', 
-      color: '#000000' 
-    },
-    { 
-      name: 'WhatsApp', 
-      url: 'https://wa.me/526681234567', 
-      icon: 'bi-whatsapp', 
-      color: '#25d366' 
-    }
-  ];
+  const [socialLinks, setSocialLinks] = useState([]);
+
+  useEffect(() => {
+    const loadSocialLinks = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('social_links')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        setSocialLinks(data || []);
+      } catch (error) {
+        console.error('Error loading social links:', error);
+        // Fallback a datos por defecto si falla la carga
+        setSocialLinks([
+          { 
+            name: 'Facebook', 
+            url: 'https://www.facebook.com', 
+            icon: 'bi-facebook', 
+            color: '#1877f2' 
+          },
+          { 
+            name: 'Instagram', 
+            url: 'https://www.instagram.com', 
+            icon: 'bi-instagram', 
+            color: '#e4405f' 
+          },
+          { 
+            name: 'Twitter', 
+            url: 'https://twitter.com', 
+            icon: 'bi-twitter-x', 
+            color: '#000000' 
+          },
+          { 
+            name: 'WhatsApp', 
+            url: 'https://wa.me/526681234567', 
+            icon: 'bi-whatsapp', 
+            color: '#25d366' 
+          }
+        ]);
+      }
+    };
+
+    loadSocialLinks();
+
+    // Suscribirse a cambios en tiempo real
+    const subscription = supabase
+      .channel('footer_social_links_changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'social_links'
+      }, () => {
+        loadSocialLinks();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <footer className='footer'>
@@ -44,24 +82,26 @@ const Footer = () => {
                   Tu plataforma confiable para encontrar los mejores precios.
                 </p>
                 
-                {/* Social Links */}
+                {/* Social Links - Ahora desde la BD */}
                 <div className='social-section'>
                   <p className='social-title'>Síguenos en:</p>
                   <div className='social-links'>
-                    {socialLinks.map((social, index) => (
-                      <a
-                        key={index}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className='social-link'
-                        style={{ '--social-color': social.color }}
-                        aria-label={`Síguenos en ${social.name}`}
-                        title={social.name}
-                      >
-                        <i className={`bi ${social.icon}`}></i>
-                      </a>
-                    ))}
+                    {socialLinks.length > 0 ? (
+                      socialLinks.map((social, index) => (
+                        <a
+                          key={index}
+                          href={social.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className='social-link'
+                          style={{ '--social-color': social.color }}
+                          aria-label={`Síguenos en ${social.name}`}
+                          title={social.name}
+                        >
+                          <i className={`bi ${social.icon}`}></i>
+                        </a>
+                      ))
+                    ) : null}
                   </div>
                 </div>
               </div>

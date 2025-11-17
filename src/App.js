@@ -15,6 +15,8 @@ import AdminProducts from './pages/Admin/AdminProducts/AdminProducts';
 import AdminCategories from './pages/Admin/AdminCategories/AdminCategories';
 import AdminProductForm from './pages/Admin/AdminProductForm/AdminProductForm';
 import AdminUsers from './pages/Admin/AdminUsers/AdminUsers';
+import AdminSocialLinks from './pages/Admin/AdminSocialLinks/AdminSocialLinks';
+
 
 import SingleProduct from './pages/SingleProduct/SingleProduct';
 import AllProductsPage from './pages/AllProductsPage/AllProductsPage';
@@ -42,6 +44,7 @@ function Layout() {
         <Route path="/admin/products/new" element={<AdminProductForm />} />
         <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/social-links" element={<AdminSocialLinks />} />
 
         <Route path="/product/:id" element={<ErrorBoundary><SingleProduct /></ErrorBoundary>} />
         <Route path="/products" element={<ErrorBoundary><AllProductsPage /></ErrorBoundary>} />

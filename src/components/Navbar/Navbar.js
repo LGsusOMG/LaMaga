@@ -15,37 +15,74 @@ const Navbar = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [socialLinks, setSocialLinks] = useState([]);
   const searchRef = useRef(null);
   const suggestionsTimeoutRef = useRef(null);
 
   // Obtener categorías desde Redux
   const categories = useSelector(getAllCategories);
 
-  const socialLinks = [
-    { 
-      name: 'Facebook', 
-      url: 'https://www.facebook.com', 
-      icon: 'bi-facebook', 
-      color: '#1877f2' 
-    },
-    { 
-      name: 'Instagram', 
-      url: 'https://www.instagram.com', 
-      icon: 'bi-instagram', 
-      color: '#e4405f' 
-    },
-    { 
-      name: 'WhatsApp', 
-      url: 'https://wa.me/526681234567', 
-      icon: 'bi-whatsapp', 
-      color: '#25d366' 
-    }
-  ];
-
   // Cargar categorías al montar el componente
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
+
+  // Cargar enlaces sociales desde la base de datos
+  useEffect(() => {
+    const loadSocialLinks = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('social_links')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        setSocialLinks(data || []);
+      } catch (error) {
+        console.error('Error loading social links:', error);
+        // Fallback a datos por defecto si falla la carga
+        setSocialLinks([
+          { 
+            name: 'Facebook', 
+            url: 'https://www.facebook.com', 
+            icon: 'bi-facebook', 
+            color: '#1877f2' 
+          },
+          { 
+            name: 'Instagram', 
+            url: 'https://www.instagram.com', 
+            icon: 'bi-instagram', 
+            color: '#e4405f' 
+          },
+          { 
+            name: 'WhatsApp', 
+            url: 'https://wa.me/526681234567', 
+            icon: 'bi-whatsapp', 
+            color: '#25d366' 
+          }
+        ]);
+      }
+    };
+
+    loadSocialLinks();
+
+    // Suscribirse a cambios en tiempo real
+    const subscription = supabase
+      .channel('social_links_changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'social_links'
+      }, () => {
+        loadSocialLinks();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -388,24 +425,30 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Social Links */}
+          {/* Social Links - Ahora desde la BD */}
           <div className='social-section'>
             <span className='social-label'>Síguenos:</span>
             <div className='social-links'>
-              {socialLinks.map((social, index) => (
-                <a 
-                  key={index}
-                  href={social.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className='social-link'
-                  style={{'--social-color': social.color}}
-                  aria-label={`Síguenos en ${social.name}`}
-                  title={social.name}
-                >
-                  <i className={`bi ${social.icon}`}></i>
-                </a>
-              ))}
+              {socialLinks.length > 0 ? (
+                socialLinks.map((social, index) => (
+                  <a 
+                    key={index}
+                    href={social.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className='social-link'
+                    style={{'--social-color': social.color}}
+                    aria-label={`Síguenos en ${social.name}`}
+                    title={social.name}
+                  >
+                    <i className={`bi ${social.icon}`}></i>
+                  </a>
+                ))
+              ) : (
+                <span className='loading-text'>
+                  <div className='spinner-small'></div>
+                </span>
+              )}
             </div>
           </div>
         </div>
