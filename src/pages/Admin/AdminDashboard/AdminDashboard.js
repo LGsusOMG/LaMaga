@@ -54,11 +54,16 @@ const AdminDashboard = () => {
                 .from('social_links')
                 .select('*', { count: 'exact', head: true });
 
+            const { count: slidesCount } = await supabase
+                .from('header_slides')
+                .select('*', { count: 'exact', head: true });
+
             setStats({
                 products: productsCount || 0,
                 categories: categoriesCount || 0,
                 admins: adminsCount || 0,
                 socialLinks: socialLinksCount || 0,
+                slides: slidesCount || 0,
                 orders: 0
             });
             setLoading(false);
@@ -172,6 +177,21 @@ const AdminDashboard = () => {
                                     </div>
                                     <button
                                         onClick={() => navigate('/admin/social-links')}
+                                        className="stat-action"
+                                    >
+                                        Gestionar →
+                                    </button>
+                                </div>
+
+                                <div className={`stat-card slides ${loading ? 'loading' : ''}`}>
+                                    <div className="stat-icon">🖼️</div>
+                                    <div className="stat-info">
+                                        <h3>Slides</h3>
+                                        <p className="stat-number">{stats.slides}</p>
+                                        <p className="stat-description">Slides configurados</p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/admin/slides')}
                                         className="stat-action"
                                     >
                                         Gestionar →

@@ -77,23 +77,24 @@
                 }
             }
 
-            .brand-logo-wrapper {
-                width: 44px;
-                height: 44px;
-                background: white;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                transition: all 0.3s ease;
 
-                .brand-logo {
-                    width: 34px;
-                    height: 34px;
-                    object-fit: contain;
+
+            .brand-logo-wrapper {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+
+                    .brand-logo {
+                        width: 30px;
+                        height: 30px;
+                        object-fit: contain;
+                        animation: float 3s ease-in-out infinite;
+                    }
                 }
-            }
 
             .brand-text {
                 display: flex;
