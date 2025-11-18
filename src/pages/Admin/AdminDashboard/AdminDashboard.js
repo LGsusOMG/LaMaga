@@ -50,19 +50,28 @@ const AdminDashboard = () => {
                 .from('admins')
                 .select('*', { count: 'exact', head: true });
 
+            // Cargar información de contacto
+            const { count: contactInfoCount } = await supabase
+                .from('contact_info')
+                .select('*', { count: 'exact', head: true });
+
+            // Cargar redes sociales
             const { count: socialLinksCount } = await supabase
-                .from('social_links')
+                .from('contact_social_links')
                 .select('*', { count: 'exact', head: true });
 
             const { count: slidesCount } = await supabase
                 .from('header_slides')
                 .select('*', { count: 'exact', head: true });
 
+            // Sumar información de contacto + redes sociales
+            const totalContactItems = (contactInfoCount || 0) + (socialLinksCount || 0);
+
             setStats({
                 products: productsCount || 0,
                 categories: categoriesCount || 0,
                 admins: adminsCount || 0,
-                socialLinks: socialLinksCount || 0,
+                contactItems: totalContactItems,
                 slides: slidesCount || 0,
                 orders: 0
             });
@@ -168,15 +177,15 @@ const AdminDashboard = () => {
                                     </button>
                                 </div>
 
-                                <div className={`stat-card social ${loading ? 'loading' : ''}`}>
-                                    <div className="stat-icon">🔗</div>
+                                <div className={`stat-card contact ${loading ? 'loading' : ''}`}>
+                                    <div className="stat-icon">📞</div>
                                     <div className="stat-info">
-                                        <h3>Redes Sociales</h3>
-                                        <p className="stat-number">{stats.socialLinks}</p>
-                                        <p className="stat-description">Enlaces configurados</p>
+                                        <h3>Información de Contacto</h3>
+                                        <p className="stat-number">{stats.contactItems}</p>
+                                        <p className="stat-description">Datos de contacto y redes sociales</p>
                                     </div>
                                     <button
-                                        onClick={() => navigate('/admin/social-links')}
+                                        onClick={() => navigate('/admin/contact')}
                                         className="stat-action"
                                     >
                                         Gestionar →
