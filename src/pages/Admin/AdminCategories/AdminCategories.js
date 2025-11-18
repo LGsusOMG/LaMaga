@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../data/supabaseClient';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import ImageUpload from '../../../components/Admin/ImageUpload/ImageUpload';
 import './AdminCategories.scss';
 
 const AdminCategories = () => {
@@ -13,7 +14,8 @@ const AdminCategories = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image_url: ''
+    image_url: '',
+    image_path: ''
   });
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -56,20 +58,30 @@ const AdminCategories = () => {
     setLoading(false);
   };
 
+  const handleImageUpload = (url, path) => {
+    setFormData(prev => ({
+      ...prev,
+      image_url: url,
+      image_path: path
+    }));
+  };
+
   const handleOpenModal = (category = null) => {
     if (category) {
       setEditingCategory(category);
       setFormData({
         name: category.name,
         description: category.description || '',
-        image_url: category.image_url || ''
+        image_url: category.image_url || '',
+        image_path: category.image_path || ''
       });
     } else {
       setEditingCategory(null);
       setFormData({
         name: '',
         description: '',
-        image_url: ''
+        image_url: '',
+        image_path: ''
       });
     }
     setShowModal(true);
@@ -81,7 +93,8 @@ const AdminCategories = () => {
     setFormData({
       name: '',
       description: '',
-      image_url: ''
+      image_url: '',
+      image_path: ''
     });
   };
 
@@ -90,36 +103,37 @@ const AdminCategories = () => {
     setSubmitting(true);
 
     try {
+      const categoryData = {
+        name: formData.name,
+        description: formData.description || null,
+        image_url: formData.image_url || null,
+        image_path: formData.image_path || null
+      };
+
       if (editingCategory) {
         // Actualizar categoría
         const { error } = await supabase
           .from('categories')
-          .update({
-            name: formData.name,
-            description: formData.description,
-            image_url: formData.image_url
-          })
+          .update(categoryData)
           .eq('id', editingCategory.id);
 
         if (error) throw error;
+        alert('Categoría actualizada exitosamente');
       } else {
         // Crear nueva categoría
         const { error } = await supabase
           .from('categories')
-          .insert([{
-            name: formData.name,
-            description: formData.description,
-            image_url: formData.image_url
-          }]);
+          .insert([categoryData]);
 
         if (error) throw error;
+        alert('Categoría creada exitosamente');
       }
 
       handleCloseModal();
       loadCategories();
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al guardar la categoría');
+      alert('Error al guardar la categoría: ' + error.message);
     } finally {
       setSubmitting(false);
     }
@@ -137,17 +151,36 @@ const AdminCategories = () => {
       return;
     }
 
-    if (window.confirm(`¿Estás seguro de eliminar la categoría "${name}"?`)) {
+    if (!window.confirm(`¿Estás seguro de eliminar la categoría "${name}"?`)) {
+      return;
+    }
+
+    try {
+      const categoryToDelete = categories.find(c => c.id === id);
+      
+      // Si tiene imagen en storage, eliminarla
+      if (categoryToDelete?.image_path) {
+        const { error: storageError } = await supabase.storage
+          .from('categories')
+          .remove([categoryToDelete.image_path]);
+        
+        if (storageError) {
+          console.error('Error deleting image from storage:', storageError);
+        }
+      }
+
       const { error } = await supabase
         .from('categories')
         .delete()
         .eq('id', id);
       
-      if (!error) {
-        loadCategories();
-      } else {
-        alert('Error al eliminar la categoría');
-      }
+      if (error) throw error;
+
+      alert('Categoría eliminada exitosamente');
+      loadCategories();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      alert('Error al eliminar la categoría: ' + error.message);
     }
   };
 
@@ -311,23 +344,17 @@ const AdminCategories = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="image_url">URL de la imagen</label>
-                <input
-                  id="image_url"
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                  placeholder="https://ejemplo.com/imagen.jpg"
+                <label>Imagen de la categoría</label>
+                <ImageUpload
+                  currentImageUrl={formData.image_url}
+                  onImageUpload={handleImageUpload}
+                  productId={editingCategory?.id}
+                  bucket="categories"
+                  recommendedSize="800x600px"
                 />
-                {formData.image_url && (
-                  <div className="image-preview">
-                    <img 
-                      src={formData.image_url} 
-                      alt="Preview"
-                      onError={(e) => e.target.src = '/placeholder.png'}
-                    />
-                  </div>
-                )}
+                <p className="helper-text">
+                  Recomendado: 800x600px para mejor visualización
+                </p>
               </div>
 
               <div className="modal-actions">
@@ -344,7 +371,16 @@ const AdminCategories = () => {
                   className="btn-submit"
                   disabled={submitting}
                 >
-                  {submitting ? 'Guardando...' : editingCategory ? 'Actualizar' : 'Crear'}
+                  {submitting ? (
+                    <>
+                      <div className="btn-spinner"></div>
+                      Guardando...
+                    </>
+                  ) : (
+                    <>
+                      {editingCategory ? 'Actualizar' : 'Crear'}
+                    </>
+                  )}
                 </button>
               </div>
             </form>
