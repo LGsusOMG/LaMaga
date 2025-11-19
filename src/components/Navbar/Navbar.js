@@ -32,13 +32,18 @@ const Navbar = () => {
     const loadSocialLinks = async () => {
       try {
         const { data, error } = await supabase
-          .from('social_links')
+          .from('contact_social_links') // ✅ Tabla actualizada
           .select('*')
           .eq('is_active', true)
           .order('display_order', { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error loading social links:', error);
+          throw error;
+        }
+
         setSocialLinks(data || []);
+        console.log('Navbar - Social links loaded:', data);
       } catch (error) {
         console.error('Error loading social links:', error);
         // Fallback a datos por defecto si falla la carga
@@ -69,15 +74,22 @@ const Navbar = () => {
 
     // Suscribirse a cambios en tiempo real
     const subscription = supabase
-      .channel('social_links_changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'social_links'
-      }, () => {
-        loadSocialLinks();
-      })
-      .subscribe();
+      .channel('navbar_social_links_realtime') // Nombre único del canal
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'contact_social_links' // Tabla actualizada
+        },
+        (payload) => {
+          console.log('Navbar - Social links changed:', payload);
+          loadSocialLinks();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Navbar - Subscription status:', status);
+      });
 
     return () => {
       subscription.unsubscribe();
@@ -425,14 +437,14 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Social Links - Ahora desde la BD */}
+          {/* Social Links - Ahora desde contact_social_links */}
           <div className='social-section'>
             <span className='social-label'>Síguenos:</span>
             <div className='social-links'>
               {socialLinks.length > 0 ? (
                 socialLinks.map((social, index) => (
                   <a 
-                    key={index}
+                    key={social.id || index}
                     href={social.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
