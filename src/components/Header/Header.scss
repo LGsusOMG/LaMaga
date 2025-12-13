@@ -59,7 +59,7 @@
                 }
             }
 
-            @media screen and (max-width: 768px) {
+            @include mobile-landscape {
                 .top-bar-content {
                     flex-direction: column;
                     gap: 8px;

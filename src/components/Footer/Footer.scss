@@ -18,7 +18,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
 
-            @media screen and (max-width: 768px) {
+            @include mobile-landscape {
                 grid-template-columns: 1fr;
                 gap: 30px;
                 text-align: center;
@@ -59,7 +59,7 @@
                     height: 2px;
                     background: linear-gradient(90deg, #ffd700 0%, transparent 100%);
 
-                    @media screen and (max-width: 768px) {
+                    @include mobile-landscape {
                         left: 50%;
                         transform: translateX(-50%);
                     }

@@ -93,7 +93,7 @@
                 &.slider-arrow-prev {
                     left: 25px;
 
-                    @media screen and (max-width: 1400px) {
+                    @include desktop {
                         left: 35px;
                     }
                 }
@@ -101,12 +101,12 @@
                 &.slider-arrow-next {
                     right: 25px;
 
-                    @media screen and (max-width: 1400px) {
+                    @include desktop {
                         right: 35px;
                     }
                 }
 
-                @media screen and (max-width: 768px) {
+                @include mobile-landscape {
                     width: 45px;
                     height: 45px;
 
@@ -115,7 +115,7 @@
                     }
                 }
 
-                @media screen and (max-width: 576px) {
+                @include mobile {
                     display: none !important;
                 }
             }
@@ -141,7 +141,7 @@
                 list-style: none;
                 z-index: 10;
 
-                @media screen and (max-width: 576px) {
+                @include mobile {
                     bottom: 20px;
                 }
 

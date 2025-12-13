@@ -16,6 +16,51 @@ $font-family-manrope: 'Manrope', sans-serif;
 $font-family-poppins: 'Poppins', sans-serif;
 $transition-ease: all 300ms ease-in-out;
 
+// breakpoints
+$mobile: 320px;
+$mobile-landscape: 480px;
+$tablet: 768px;
+$laptop: 1024px;
+$desktop: 1200px;
+$wide: 1400px;
+
+// media query mixins
+@mixin mobile {
+  @media screen and (max-width: 479px) {
+    @content;
+  }
+}
+
+@mixin mobile-landscape {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin wide {
+  @media screen and (min-width: 1400px) {
+    @content;
+  }
+}
+
 // global styles & resets
 *,
 *::after,
@@ -74,6 +119,18 @@ input, textarea, select{
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 2rem;
+
+    @include mobile {
+        padding: 0 1rem;
+    }
+
+    @include mobile-landscape {
+        padding: 0 1.5rem;
+    }
+
+    @include tablet {
+        padding: 0 1.75rem;
+    }
 }
 
 /* flexbox and grid */

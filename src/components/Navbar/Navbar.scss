@@ -16,16 +16,16 @@
         gap: 2rem;
         width: 100%;
 
-        @media screen and (max-width: 992px) {
+        @include laptop {
             gap: 1.5rem;
         }
 
-        @media screen and (max-width: 768px) {
+        @include mobile-landscape {
             flex-wrap: wrap;
             gap: 1rem;
         }
 
-        @media screen and (max-width: 576px) {
+        @include mobile {
             flex-direction: column;
             gap: 1rem;
         }
@@ -127,7 +127,7 @@
         position: relative;
         z-index: 100;
 
-        @media screen and (max-width: 768px) {
+        @include mobile-landscape {
             flex: 0 0 100%;
             max-width: 100%;
             order: 2;

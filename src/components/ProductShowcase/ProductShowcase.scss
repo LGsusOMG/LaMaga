@@ -22,8 +22,13 @@
                 margin: 0;
                 padding: 0 20px;
 
-                @media screen and (max-width: 768px) {
+                @include mobile-landscape {
                     font-size: 2rem;
+                }
+
+                @include mobile {
+                    font-size: 1.5rem;
+                    padding: 0 10px;
                 }
             }
 
@@ -41,8 +46,13 @@
             margin: 0;
             font-weight: 400;
 
-            @media screen and (max-width: 768px) {
+            @include mobile-landscape {
                 font-size: 1rem;
+            }
+
+            @include mobile {
+                font-size: 0.9rem;
+                padding: 0 10px;
             }
         }
     }

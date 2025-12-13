@@ -1,0 +1,195 @@
+/* 
+  RESPONSIVE UTILITIES
+  Utilities helper classes for responsive design
+*/
+
+@use "./App.scss" as *;
+
+// Display utilities
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+// Display responsive
+@include mobile {
+  .d-none\@mobile { display: none; }
+  .d-block\@mobile { display: block; }
+  .d-flex\@mobile { display: flex; }
+}
+
+@include mobile-landscape {
+  .d-none\@tablet-sm { display: none; }
+  .d-block\@tablet-sm { display: block; }
+  .d-flex\@tablet-sm { display: flex; }
+}
+
+@include tablet {
+  .d-none\@tablet { display: none; }
+  .d-block\@tablet { display: block; }
+  .d-flex\@tablet { display: flex; }
+}
+
+@include laptop {
+  .d-none\@laptop { display: none; }
+  .d-block\@laptop { display: block; }
+  .d-flex\@laptop { display: flex; }
+}
+
+@include desktop {
+  .d-none\@desktop { display: none; }
+  .d-block\@desktop { display: block; }
+  .d-flex\@desktop { display: flex; }
+}
+
+// Margin utilities
+.m-0 { margin: 0; }
+.m-1 { margin: 0.5rem; }
+.m-2 { margin: 1rem; }
+.m-3 { margin: 1.5rem; }
+.m-4 { margin: 2rem; }
+
+.mx-auto { margin-left: auto; margin-right: auto; }
+.my-auto { margin-top: auto; margin-bottom: auto; }
+
+// Padding utilities
+.p-0 { padding: 0; }
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+// Padding responsive
+@include mobile {
+  .p-mobile { padding: 1rem; }
+  .px-mobile { padding-left: 1rem; padding-right: 1rem; }
+  .py-mobile { padding-top: 1rem; padding-bottom: 1rem; }
+}
+
+@include mobile-landscape {
+  .p-tablet-sm { padding: 1.5rem; }
+  .px-tablet-sm { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .py-tablet-sm { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+}
+
+@include tablet {
+  .p-tablet { padding: 2rem; }
+  .px-tablet { padding-left: 2rem; padding-right: 2rem; }
+  .py-tablet { padding-top: 2rem; padding-bottom: 2rem; }
+}
+
+// Text utilities
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+// Font size utilities
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+
+// Font weight utilities
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+// Width utilities
+.w-full { width: 100%; }
+.w-half { width: 50%; }
+.w-1\/3 { width: 33.333%; }
+.w-2\/3 { width: 66.666%; }
+.w-1\/4 { width: 25%; }
+.w-3\/4 { width: 75%; }
+
+// Max width utilities
+.max-w-sm { max-width: 24rem; }
+.max-w-md { max-width: 28rem; }
+.max-w-lg { max-width: 32rem; }
+.max-w-xl { max-width: 36rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-full { max-width: 100%; }
+.max-w-container { max-width: 1280px; margin-left: auto; margin-right: auto; }
+
+// Flexbox utilities
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+// Grid utilities
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+.gap-4 { gap: 2rem; }
+
+// Border radius utilities
+.rounded-none { border-radius: 0; }
+.rounded-sm { border-radius: 0.25rem; }
+.rounded { border-radius: 0.375rem; }
+.rounded-md { border-radius: 0.5rem; }
+.rounded-lg { border-radius: 1rem; }
+.rounded-xl { border-radius: 1.5rem; }
+.rounded-full { border-radius: 9999px; }
+
+// Opacity utilities
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+// Box shadow utilities
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+.shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+.shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+
+// Overflow utilities
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-visible { overflow: visible; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+// Aspect ratio utilities (para imágenes responsivas)
+.aspect-square { aspect-ratio: 1; }
+.aspect-video { aspect-ratio: 16/9; }
+
+// Position utilities
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.static { position: static; }
+
+// Z-index utilities
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-30 { z-index: 30; }
+.z-40 { z-index: 40; }
+.z-50 { z-index: 50; }
+
+// Transition utilities
+.transition-none { transition: none; }
+.transition { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.transition-fast { transition-duration: 100ms; }
+.transition-normal { transition-duration: 200ms; }
+.transition-slow { transition-duration: 300ms; }
+.transition-slowest { transition-duration: 500ms; }

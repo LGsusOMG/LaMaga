@@ -4,22 +4,23 @@
     display: grid;
     gap: 25px;
     padding: 20px 0;
+    grid-template-columns: 1fr;
 
-    @media screen and (min-width: 576px) {
+    @include mobile-landscape {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
-    @media screen and (min-width: 992px) {
+    @include laptop {
         grid-template-columns: repeat(3, 1fr);
         gap: 25px;
     }
 
-    @media screen and (min-width: 1200px) {
+    @include desktop {
         grid-template-columns: repeat(4, 1fr);
     }
 
-    @media screen and (min-width: 1400px) {
+    @include wide {
         grid-template-columns: repeat(5, 1fr);
     }
 }
