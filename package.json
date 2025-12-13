@@ -14,7 +14,6 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
-    "sass": "^1.92.1",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
@@ -41,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "sass": "^1.94.1",
+    "sass-loader": "^16.0.6"
   }
 }

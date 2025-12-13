@@ -80,21 +80,21 @@
 
 
             .brand-logo-wrapper {
-                    width: 45px;
-                    height: 45px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.3s ease;
+                width: 45px;
+                height: 45px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
 
-                    .brand-logo {
-                        width: 30px;
-                        height: 30px;
-                        object-fit: contain;
-                        animation: float 3s ease-in-out infinite;
-                    }
+                .brand-logo {
+                    width: 30px;
+                    height: 30px;
+                    object-fit: contain;
+                    animation: float 3s ease-in-out infinite;
                 }
+            }
 
             .brand-text {
                 display: flex;
@@ -465,11 +465,11 @@
 
             .social-links {
                 display: flex;
-                gap: 0.5rem;
+                gap: 0.75rem;
 
                 .social-link {
-                    width: 36px;
-                    height: 36px;
+                    width: 30px; // Más grande
+                    height: 30px;
                     border-radius: 50%;
                     background: white;
                     color: var(--social-color);
@@ -481,7 +481,7 @@
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
                     i {
-                        font-size: 1rem;
+                        font-size: 1.75rem; // Proporcional al contenedor
                     }
 
                     &:hover {

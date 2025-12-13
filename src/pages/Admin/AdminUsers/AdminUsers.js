@@ -22,6 +22,8 @@ const AdminUsers = () => {
   const [editPassword, setEditPassword] = useState('');
   const navigate = useNavigate();
 
+  const specialChars = /[!@#$%^&*()_+=\-[\]{};':"\\|,.<>/?]/;
+
   const availableRoles = ['admin', 'operador'];
   const REQUIRED_ROLE_FOR_MANAGEMENT = 'superadmin';
 
@@ -76,7 +78,7 @@ const AdminUsers = () => {
       strength += 20;
     }
 
-    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+    if (!specialChars.test(password)) {
       errors.push('Debe contener al menos un carácter especial (!@#$%^&*)');
     } else {
       strength += 20;
@@ -616,7 +618,7 @@ const AdminUsers = () => {
                           <li className={/\d/.test(newAdminPassword) ? 'valid' : ''}>
                             ✓ Un número
                           </li>
-                          <li className={/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newAdminPassword) ? 'valid' : ''}>
+                          <li className={!specialChars.test(newAdminPassword) ? 'valid' : ''}>
                             ✓ Un carácter especial (!@#$%^&*)
                           </li>
                         </ul>
@@ -770,7 +772,7 @@ const AdminUsers = () => {
                           <li className={/\d/.test(editPassword) ? 'valid' : ''}>
                             ✓ Un número
                           </li>
-                          <li className={/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(editPassword) ? 'valid' : ''}>
+                          <li className={!specialChars.test(editPassword) ? 'valid' : ''}>
                             ✓ Un carácter especial (!@#$%^&*)
                           </li>
                         </ul>
