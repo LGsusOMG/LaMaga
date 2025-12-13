@@ -18,6 +18,7 @@ import AdminUsers from './pages/Admin/AdminUsers/AdminUsers';
 import AdminSocialLinks from './pages/Admin/AdminSocialLinks/AdminSocialLinks';
 import AdminSlides from './pages/Admin/AdminSlides/AdminSlides';
 import AdminContactManager from './pages/Admin/AdminContactManager/AdminContactManager';
+import AdminNewsletter from './pages/Admin/AdminNewsletter/AdminNewsletter';
 
 
 import SingleProduct from './pages/SingleProduct/SingleProduct';
@@ -49,6 +50,7 @@ function Layout() {
         <Route path="/admin/social-links" element={<AdminSocialLinks />} />
         <Route path="/admin/slides" element={<AdminSlides />} />
         <Route path="/admin/contact" element={<AdminContactManager />} />
+        <Route path="/admin/newsletter" element={<AdminNewsletter />} />
 
         <Route path="/product/:id" element={<ErrorBoundary><SingleProduct /></ErrorBoundary>} />
         <Route path="/products" element={<ErrorBoundary><AllProductsPage /></ErrorBoundary>} />

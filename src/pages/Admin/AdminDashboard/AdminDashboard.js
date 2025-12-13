@@ -63,6 +63,10 @@ const AdminDashboard = () => {
             const { count: slidesCount } = await supabase
                 .from('header_slides')
                 .select('*', { count: 'exact', head: true });
+            
+            const { count: newsletterCount } = await supabase
+                .from('newsletter_subscribers')
+                .select('*', { count: 'exact', head: true });
 
             // Sumar información de contacto + redes sociales
             const totalContactItems = (contactInfoCount || 0) + (socialLinksCount || 0);
@@ -73,7 +77,8 @@ const AdminDashboard = () => {
                 admins: adminsCount || 0,
                 contactItems: totalContactItems,
                 slides: slidesCount || 0,
-                orders: 0
+                orders: 0,
+                newsletter: newsletterCount || 0
             });
             setLoading(false);
         };
@@ -206,6 +211,21 @@ const AdminDashboard = () => {
                                         Gestionar →
                                     </button>
                                 </div>
+
+                                <div className={`stat-card newsletter ${loading ? 'loading' : ''}`}>
+                                    <div className="stat-icon">📧</div>
+                                    <div className="stat-info">
+                                        <h3>Newsletter</h3>
+                                        <p className="stat-number">{stats.newsletter}</p>
+                                        <p className="stat-description">Gestionar suscriptores y envíos</p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/admin/newsletter')}
+                                        className="stat-action"
+                                    >
+                                        Gestionar →
+                                    </button>
+                                </div>
                             </>
                         )}
                     </div>
@@ -251,6 +271,20 @@ const AdminDashboard = () => {
                             </div>
                             <h3>Ver Inventario</h3>
                             <p>Revisar todos los productos</p>
+                        </button>
+
+                        <button
+                            onClick={() => navigate('/admin/newsletter')}
+                            className="action-card newsletter"
+                        >
+                            <div className="action-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            <h3>Enviar Newsletter</h3>
+                            <p>Crear y enviar campañas por email</p>
                         </button>
                     </div>
                 </section>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./HomePage.scss";
 import HeaderSlider from "../../components/Slider/HeaderSlider";
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,12 +14,19 @@ import {
   getAllProducts, 
   getFeaturedProductsState 
 } from '../../store/productSlice';
+import { supabase } from '../../data/supabaseClient';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const categories = useSelector(getAllCategories);
   const allProducts = useSelector(getAllProducts);
   const featuredProducts = useSelector(getFeaturedProductsState);
+  
+  // Newsletter state
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -31,6 +38,70 @@ const HomePage = () => {
     return allProducts
       .filter(product => product.category === categoryName)
       .slice(0, 8);
+  };
+
+  // Función para manejar suscripción al newsletter
+  const handleNewsletterSubscribe = async (e) => {
+    e.preventDefault();
+    setNewsletterLoading(true);
+    setNewsletterMessage('');
+    setNewsletterSuccess(false);
+
+    try {
+      // Validar email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(newsletterEmail)) {
+        setNewsletterMessage('Por favor ingresa un correo válido');
+        setNewsletterLoading(false);
+        return;
+      }
+
+      // Verificar si ya existe
+      const { data: existingSubscriber } = await supabase
+        .from('newsletter_subscribers')
+        .select('id')
+        .eq('email', newsletterEmail)
+        .single();
+
+      if (existingSubscriber) {
+        setNewsletterMessage('Este correo ya está suscrito');
+        setNewsletterSuccess(true);
+        setNewsletterEmail('');
+        setNewsletterLoading(false);
+        return;
+      }
+
+      // Insertar nuevo suscriptor
+      const { error } = await supabase
+        .from('newsletter_subscribers')
+        .insert([
+          {
+            email: newsletterEmail,
+            subscribed_to_new_products: true,
+            subscribed_to_discounts: true,
+            subscribed_to_promotions: true,
+            is_active: true
+          }
+        ]);
+
+      if (error) throw error;
+
+      setNewsletterMessage('¡Suscripción exitosa! Recibirás nuestras mejores ofertas');
+      setNewsletterSuccess(true);
+      setNewsletterEmail('');
+      
+      // Limpiar mensaje después de 3 segundos
+      setTimeout(() => {
+        setNewsletterMessage('');
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error en suscripción:', error);
+      setNewsletterMessage('Error al suscribirse. Intenta de nuevo');
+      setNewsletterSuccess(false);
+    } finally {
+      setNewsletterLoading(false);
+    }
   };
 
   return (
@@ -161,20 +232,33 @@ const HomePage = () => {
                 <h3>Suscríbete a nuestro boletín</h3>
                 <p>Recibe ofertas exclusivas y las últimas novedades</p>
               </div>
-              <form className='newsletter-form'>
+              <form className='newsletter-form' onSubmit={handleNewsletterSubscribe}>
                 <div className='newsletter-input-wrapper'>
                   <i className='bi bi-envelope'></i>
                   <input 
                     type='email' 
                     placeholder='Tu correo electrónico' 
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
                     required
+                    disabled={newsletterLoading}
                   />
                 </div>
-                <button type='submit' className='newsletter-submit'>
-                  <span>Suscribirse</span>
-                  <i className='bi bi-send'></i>
+                <button 
+                  type='submit' 
+                  className='newsletter-submit'
+                  disabled={newsletterLoading}
+                >
+                  <span>{newsletterLoading ? 'Suscribiendo...' : 'Suscribirse'}</span>
+                  <i className={`bi ${newsletterLoading ? 'bi-hourglass-split' : 'bi-send'}`}></i>
                 </button>
               </form>
+              {newsletterMessage && (
+                <div className={`newsletter-message ${newsletterSuccess ? 'success' : 'error'}`}>
+                  <i className={`bi ${newsletterSuccess ? 'bi-check-circle' : 'bi-exclamation-circle'}`}></i>
+                  <span>{newsletterMessage}</span>
+                </div>
+              )}
             </div>
           </section>
 
